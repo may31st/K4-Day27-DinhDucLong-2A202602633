@@ -9,7 +9,7 @@ lần thu thập này. Sau khi người dùng thay token, review PR #2 đã đư
 - [Comment thật của may31st trên PR #2](https://github.com/VinUni-AI20k/PR-Demo/pull/2#issuecomment-6197316976).
 - GitHub trả HTTP **201**, thời điểm `2026-10-15T16:43:43Z` (23:43:43 giờ Việt Nam).
 - Graph kết thúc với `final_action = committed_after_escalation`, confidence 50%.
-- [Thẻ thành công Streamlit](05-pr2-success.png), [audit trên giao diện](06-pr2-audit-success.png), [comment trên GitHub](07-github-pr2-comment.png).
+- [Thẻ thành công Streamlit](05-pr2-success.png), [audit trên giao diện](06-pr2-audit-success.png), [comment trên GitHub](07-github-pr2-comment.png.png).
 - [Phản hồi tạo comment](github-post-response.json), [xác minh đọc lại comment](github-pr2-verification.json), [kết quả graph](pr2-final-result.json).
 - Đã đọc lại comment qua API: tác giả đúng `may31st`, nội dung khớp review đã lưu.
 - Bước commit được chạy lại từ checkpoint sau synthesize, giữ nguyên review và Q&A thật;
@@ -88,7 +88,7 @@ và kết thúc với `auto_approved`. Mặc dù đã chuẩn bị input `approv
 
 - [Comment thật của may31st trên PR #1](https://github.com/VinUni-AI20k/PR-Demo/pull/1#issuecomment-6197385176).
 - [Log Exercise 2 nguyên bản](exercise2-pr1-live.log).
-- [Ảnh comment GitHub](08-github-pr1-comment.png).
+- [Ảnh comment GitHub](08-github-pr1-comment.png.png).
 - [Kết quả xác minh qua API](github-pr1-verification.json).
 - [Nội dung comment đã đăng](github-pr1-comment.md).
 - Thread: `2fc71c04-b45e-4c00-be66-5d1fa2b81532`; Exercise 2 dùng MemorySaver,
@@ -96,7 +96,7 @@ và kết thúc với `auto_approved`. Mặc dù đã chuẩn bị input `approv
 
 ## 5. Dữ liệu kiểm chứng
 
-- [Audit JSON](audit-events.json): 18 sự kiện tại thời điểm xuất, bao gồm những
+- [Audit JSON](audit-events.json): 31 sự kiện tại thời điểm xuất, bao gồm những
   phiên trước đó và sự kiện thật trong lần thu thập này.
 - [Danh sách phiên từ CLI](audit-sessions.log).
 - Các ảnh PNG là ảnh chụp trình duyệt, không phải mockup.
@@ -104,7 +104,17 @@ và kết thúc với `auto_approved`. Mặc dù đã chuẩn bị input `approv
 
 Đã kiểm chứng đọc PR, gọi LLM, định tuyến, giao diện escalation, interrupt/resume,
 tổng hợp review, đăng comment GitHub và audit/replay thật cho phiên PR #2.
-PR #1 đã đăng comment thành công qua nhánh auto_approve. Bằng chứng nhánh
-human_approval → Approve → commit thật vẫn chưa được quan sát trong các lần
-chạy đã lưu; không sửa confidence hoặc ngưỡng để giả lập checkpoint đó.
-Bộ bằng chứng không tuyên bố đã hoàn tất mọi checkpoint của lab.
+PR #1 đã có bằng chứng thật cho cả nhánh auto_approve và nhánh human_approval → Approve → commit.
+
+## 6. Bổ sung nhánh human_approval chạy thật
+
+- Thread: `b98141fa-ed3d-481a-a5e0-ea9036ad5716`.
+- LLM thật trả confidence **70%**; giữ nguyên ngưỡng 0.58 và 0.73.
+- Phiên minh họa ghép **analyzer của Exercise 1** với các node HITL/audit của Exercise 4 bằng [script tái hiện](run_human_approval_demo.py). Đây là cấu hình tích hợp minh họa; không khẳng định analyzer mặc định của Exercise 4 cho ra 70%. Các lần chạy analyzer mặc định trước đó cho 55% và đã dừng trước route.
+- Mở checkpoint trên Streamlit, quan sát thẻ chờ duyệt, điền feedback và bấm **Approve**. Graph resume, đăng comment thật và kết thúc với `final_action=committed`, `human_choice=approve`.
+- [Comment mới trên PR #1](https://github.com/VinUni-AI20k/PR-Demo/pull/1#issuecomment-6197614043), tài khoản `may31st`, tạo lúc `2026-10-15T16:58:40Z`.
+- API GET trả **200**, nội dung comment khớp checkpoint: [kết quả xác minh](github-pr1-human-verification.json), [nội dung comment](github-pr1-human-comment.md), [checkpoint cuối](pr1-human-final.json).
+- [Trước Approve](09-pr1-human-approval-before.png), [đăng thành công](10-pr1-human-approval-success.png), [audit trên giao diện](11-pr1-human-approval-audit.png).
+- [Replay phiên](audit-pr1-human-replay.log): fetch_pr → analyze → route → human_approval → commit; sự kiện sau câu trả lời ghi `reviewer_id=may31st`, `decision=approve`. Dòng pending trước interrupt xuất hiện hai lần do node chạy lại khi resume, đúng cơ chế LangGraph.
+
+Lần bổ sung này chỉ lưu bằng chứng; không commit, push hay gửi form nộp bài.

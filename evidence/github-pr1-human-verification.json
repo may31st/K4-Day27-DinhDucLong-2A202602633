@@ -1,0 +1,12 @@
+{
+  "thread_id": "b98141fa-ed3d-481a-a5e0-ea9036ad5716",
+  "http_status": 200,
+  "id": 6197614043,
+  "url": "https://github.com/VinUni-AI20k/PR-Demo/pull/1#issuecomment-6197614043",
+  "author": "may31st",
+  "created_at": "2026-10-15T16:58:40Z",
+  "body_matches_checkpoint": true,
+  "final_action": "committed",
+  "human_choice": "approve",
+  "confidence": 0.7
+}
