@@ -1,0 +1,33 @@
+$ .venv/Scripts/python.exe -X utf8 -m audit.replay --thread b49000a4-79b8-4465-826b-fa9d0ce83411
+───────────────── Replay b49000a4-79b8-4465-826b-fa9d0ce83411 ─────────────────
+2026-10-15T05:35:12.992823+00:00  fetch_pr           conf=0.00 risk=med  
+decision=pending    reviewer=-               1943ms  Fetched 4 files, 
+head=501f95e
+2026-10-15T05:35:18.958362+00:00  analyze            conf=0.55 risk=high 
+decision=pending    reviewer=-               5928ms  The review identifies 
+several critical issues, particularly 
+2026-10-15T05:35:18.981081+00:00  route              conf=0.55 risk=high 
+decision=escalate   reviewer=-                  0ms  Selected escalate: The 
+review identifies several critical is
+2026-10-15T05:35:19.000279+00:00  escalate           conf=0.55 risk=high 
+decision=pending    reviewer=-                  0ms  Awaiting answers: What is 
+the rationale behind using MD5 for
+2026-10-15T16:30:00.589669+00:00  escalate           conf=0.55 risk=high 
+decision=pending    reviewer=-                  0ms  Awaiting answers: What is 
+the rationale behind using MD5 for
+2026-10-15T16:30:00.617626+00:00  escalate           conf=0.55 risk=high 
+decision=escalate   reviewer=may31st           27ms  Q: What is the rationale 
+behind using MD5 for password hashi
+2026-10-15T16:30:10.328101+00:00  synthesize         conf=0.50 risk=high 
+decision=escalate   reviewer=-               9648ms  The review identifies 
+several critical issues, particularly 
+2026-10-15T16:30:11.016762+00:00  commit             conf=0.50 risk=high 
+decision=escalate   reviewer=-                654ms  commit_failed: This PR 
+introduces user login functionality a
+2026-10-15T16:31:56.440947+00:00  commit             conf=0.50 risk=high 
+decision=escalate   reviewer=-               1330ms  commit_failed: This PR 
+introduces user login functionality a
+2026-10-15T16:43:46.971431+00:00  commit             conf=0.50 risk=high 
+decision=escalate   reviewer=-               1291ms  
+committed_after_escalation: This PR introduces user login fu
+

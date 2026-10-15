@@ -1,0 +1,18 @@
+$ .venv/Scripts/python.exe -X utf8 exercises/exercise_2_hitl.py --pr https://github.com/VinUni-AI20k/PR-Demo/pull/1
+Input if prompted: approve
+───────────────────── Exercise 2 — HITL with interrupt() ──────────────────────
+PR: https://github.com/VinUni-AI20k/PR-Demo/pull/1
+
+thread_id = 2fc71c04-b45e-4c00-be66-5d1fa2b81532
+
+→ fetch_pr
+  ✓ 3 files, head 1646156
+→ analyze
+  ✓ confidence=85%, 4 comment(s)
+→ route
+  ✓ decision=auto_approve (confidence=85%)
+→ auto_approve  high confidence — posting directly
+  ✓ posted comment to https://github.com/VinUni-AI20k/PR-Demo/pull/1
+──────────────────────────────────── Done ─────────────────────────────────────
+auto_approved
+

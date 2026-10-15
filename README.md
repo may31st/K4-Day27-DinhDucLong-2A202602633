@@ -1,5 +1,55 @@
 # Day27 — Track 3: HITL PR Review Agent
 
+## Bản triển khai bài lab
+
+Đã triển khai đầy đủ Exercise 1–4 và ứng dụng `app.py`. Các phần mô tả
+"skeleton" và "You implement" bên dưới là đề bài gốc để đối chiếu.
+
+```powershell
+uv sync --locked
+uv run streamlit run app.py
+```
+
+Điền `OPENROUTER_API_KEY`, `GITHUB_TOKEN` và `GITHUB_USER` (username GitHub của
+người duyệt) trong `.env`. Không đưa `.env`, database hoặc file SQLite WAL/SHM lên Git.
+
+Luồng chạy dùng đúng các ngưỡng trong `common/schemas.py`: từ `0.73` tự đăng
+review; từ `0.58` đến dưới `0.73` chờ Approve/Reject/Edit; dưới `0.58` hỏi
+câu hỏi cụ thể, phân tích lại với câu trả lời rồi đăng review đã tinh chỉnh.
+Theo yêu cầu bài lab, Reject và Edit đều kết thúc mà không đăng comment;
+Edit lưu feedback, không thực hiện bonus tự viết lại review.
+
+Ứng dụng lưu thread vào URL để tải lại trang có thể phục hồi từ SQLite.
+Chọn một dòng trong **Recent sessions** để mở phiên đó, hoặc dùng **Open session**
+để mở dòng đang chọn (mặc định là phiên gần nhất). **Audit timeline** hiển thị
+các sự kiện của phiên hiện tại. Mở lại phiên đã hoàn tất không đăng comment lần nữa.
+
+Phục hồi phiên terminal đang chờ trả lời bằng cùng PR URL và thread ID:
+
+```powershell
+uv run python -X utf8 exercises/exercise_4_audit.py --pr https://github.com/VinUni-AI20k/PR-Demo/pull/1 --thread <thread-id>
+uv run python -X utf8 -m audit.replay --thread <thread-id>
+uv run python -X utf8 -m audit.replay --list
+```
+
+`interrupt()` chạy lại node khi resume nên sự kiện audit "pending" trước
+interrupt có thể xuất hiện hai lần. Việc đăng comment nằm ở node sau interrupt.
+SQLite phục hồi được trạng thái graph; nếu tiến trình chết ngay sau khi GitHub
+đã nhận comment nhưng trước khi checkpoint được ghi, cần kiểm tra comment trên
+PR trước khi chạy lại bước đăng.
+
+Kiểm thử tự động dùng GitHub và LLM giả lập, chạy graph và SQLite thật,
+kiểm tra cả giao diện bằng Streamlit AppTest:
+
+```powershell
+uv run python -X utf8 -m unittest discover -s tests -v
+```
+
+`-X utf8` giúp terminal Windows hiển thị được các ký tự của Rich.
+Các kiểm thử không đăng comment thật hoặc cần API key. Khi chạy ứng dụng hay
+Exercise 2–4 với cấu hình thật, nhánh tự động, Approve và trả lời escalation
+có thể đăng comment thật lên PR.
+
 A 2-hour lab that builds a human-in-the-loop pull-request review agent in **LangGraph**, end-to-end.
 
 > 1. Agent reads a PR, analyzes code changes, proposes review comments.
@@ -245,7 +295,7 @@ The same three confidence buckets apply, but the *human experience* changes per 
 |---|---|---|
 | **> 72%** | `auto_approve` | A success card: confidence + LLM summary + a "View comment on GitHub" link. Reviewer does **nothing** — agent already posted. |
 | **58–72%** | `human_approval` | The normal approval card: diff, LLM reasoning, list of comments + three buttons **Approve / Reject / Edit**. One click and the comment posts. |
-| **< 58%** | `escalate` | The strong-escalation card: risk factors highlighted + a form with the LLM's specific questions. Reviewer fills answers, agent re-synthesizes, then shows the refined review for a final confirm. |
+| **< 58%** | `escalate` | The strong-escalation card: risk factors highlighted + a form with the LLM's specific questions. Reviewer fills answers, agent re-synthesizes and posts the refined review. |
 
 **You implement** (`app.py` at the repo root):
 

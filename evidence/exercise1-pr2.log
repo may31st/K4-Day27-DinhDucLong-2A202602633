@@ -1,0 +1,13 @@
+$ .venv/Scripts/python.exe -X utf8 exercises/exercise_1_confidence.py --pr https://github.com/VinUni-AI20k/PR-Demo/pull/2
+─────────────────────── Exercise 1 — confidence routing ───────────────────────
+PR: https://github.com/VinUni-AI20k/PR-Demo/pull/2
+
+→ fetch_pr
+  ✓ 4 files, head 501f95e
+→ analyze
+→ route
+✓ HUMAN APPROVAL — placeholder, exercise 2 will pause here
+──────────────────────────────────── Final ────────────────────────────────────
+confidence = 60%
+action     = pending_human_approval
+
